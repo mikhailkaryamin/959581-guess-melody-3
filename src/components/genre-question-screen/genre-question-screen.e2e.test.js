@@ -36,6 +36,34 @@ it(`When user answers genre question form is not sent`, () => {
   const {
     genreQuestion
   } = mock;
+
+  const onAnswer = jest.fn();
+  const genreQuestionScr = shallow(
+      <GenreQuestionScreen
+        onAnswer={
+          onAnswer
+        }
+        question={
+          genreQuestion
+        }
+        renderPlayer={() => {}}
+      />
+  );
+
+  const form = genreQuestionScr.find(`form`);
+  const formSendPrevention = jest.fn();
+  form.simulate(`submit`, {
+    preventDefault: formSendPrevention,
+  });
+
+  expect(onAnswer).toHaveBeenCalledTimes(1);
+  expect(formSendPrevention).toHaveBeenCalledTimes(1);
+});
+
+it(`When user answers genre question form is not sent`, () => {
+  const {
+    genreQuestion
+  } = mock;
   const onAnswer = jest.fn();
   const userAnswer = [false, true, false, false];
 
@@ -47,6 +75,7 @@ it(`When user answers genre question form is not sent`, () => {
         question={
           genreQuestion
         }
+        renderPlayer={() => {}}
       />
   );
 
