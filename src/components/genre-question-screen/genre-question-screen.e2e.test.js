@@ -87,8 +87,7 @@ it(`When user answers genre question form is not sent`, () => {
 
   expect(onAnswer).toHaveBeenCalledTimes(1);
 
-  expect(onAnswer.mock.calls[0][0]).toMatchObject(genreQuestionScr);
-  expect(onAnswer.mock.calls[0][1]).toMatchObject(userAnswer);
+  expect(onAnswer.mock.calls[0][0]).toEqual(void 0);
 
   expect(
       genreQuestionScr.find(`input`).map((it) => it.prop(`checked`))

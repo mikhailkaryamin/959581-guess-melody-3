@@ -4,23 +4,13 @@ import React, {
 import PropTypes from "prop-types";
 
 class GenreQuestionScreen extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      answers: [false, false, false, false],
-    };
-  }
-
   render() {
     const {
       onAnswer,
       question,
       renderPlayer,
+      userAnswers,
     } = this.props;
-    const {
-      answers: userAnswers,
-    } = this.state;
 
     const {
       answers,
@@ -34,7 +24,7 @@ class GenreQuestionScreen extends PureComponent {
           className="game__tracks"
           onSubmit={(evt) => {
             evt.preventDefault();
-            onAnswer(question, this.state.answers);
+            onAnswer();
           }}
         >
           {answers.map((answer, i) =>
@@ -75,6 +65,7 @@ class GenreQuestionScreen extends PureComponent {
 
 GenreQuestionScreen.propTypes = {
   onAnswer: PropTypes.func.isRequired,
+  userAnswers: PropTypes.arrayOf(PropTypes.bool).isRequired,
   question: PropTypes.shape({
     type: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired,
