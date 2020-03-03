@@ -6,6 +6,8 @@ import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
 import GenreQuestionScreen from "../genre-question-screen/genre-question-screen.jsx";
 import GameScreen from "../../components/game-screen/game-screen.jsx";
 import ArtistQuestionScreen from "../artist-question-screen/artist-question-screen.jsx";
+import GameOverScreen from "../game-over-screen/game-over-screen.jsx";
+import WinScreen from "../win-screen/win-screen.jsx";
 import {
   Switch,
   Route,
@@ -21,30 +23,54 @@ import PropTypes from "prop-types";
 import {
   GameType
 } from "../../const.js";
-import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.jsx";
+import withActiveAudioPlayer from "../../hocs/with-active-player/with-active-player.js";
+import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
 
-const GenreQuestionScreenWrapped = withAudioPlayer(GenreQuestionScreen);
-const ArtistQuestionScreenWrapped = withAudioPlayer(ArtistQuestionScreen);
+const GenreQuestionScreenWrapped = withActiveAudioPlayer(withUserAnswer(GenreQuestionScreen));
+const ArtistQuestionScreenWrapped = withActiveAudioPlayer(ArtistQuestionScreen);
 
 class App extends PureComponent {
   _renderGameScreen() {
     const {
       maxMistakes,
+      mistakes,
       questions,
       onUserAnswer,
       onWelcomeButtonClick,
       step,
+      resetGame,
     } = this.props;
 
     const question = questions[step];
-
-    if (step === -1 || step >= questions.length) {
+    if (step === -1) {
       return (
         <WelcomeScreen
           errorsCount={
             maxMistakes
           }
           onWelcomeButtonClick={onWelcomeButtonClick}
+        />
+      );
+    }
+
+    if (mistakes >= maxMistakes) {
+      return (
+        <GameOverScreen
+          onReplayButtonClick={resetGame}
+        />
+      );
+    }
+
+    if (step >= questions.length) {
+      return (
+        <WinScreen
+          questionsCount={
+            questions.length
+          }
+          mistakesCount={
+            mistakes
+          }
+          onReplayButtonClick={resetGame}
         />
       );
     }
@@ -126,6 +152,7 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  mistakes: PropTypes.number.isRequired,
   maxMistakes: PropTypes.number.isRequired,
   questions: PropTypes.arrayOf(
       PropTypes.object.isRequired
@@ -133,12 +160,14 @@ App.propTypes = {
   onUserAnswer: PropTypes.func.isRequired,
   onWelcomeButtonClick: PropTypes.func.isRequired,
   step: PropTypes.number.isRequired,
+  resetGame: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   step: state.step,
   maxMistakes: state.maxMistakes,
   questions: state.questions,
+  mistakes: state.mistakes,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -148,6 +177,9 @@ const mapDispatchToProps = (dispatch) => ({
   onUserAnswer(question, answer) {
     dispatch(ActionCreator.incrementStep());
     dispatch(ActionCreator.incrementMistake(question, answer));
+  },
+  resetGame() {
+    dispatch(ActionCreator.resetGame());
   }
 });
 

@@ -1,7 +1,8 @@
 import React from "react";
 import {
   configure,
-  shallow
+  shallow,
+  mount
 } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import GenreQuestionScreen from "./genre-question-screen.jsx";
@@ -38,6 +39,7 @@ it(`When user answers genre question form is not sent`, () => {
   } = mock;
 
   const onAnswer = jest.fn();
+  const userAnswer = [false, false, false, false];
   const genreQuestionScr = shallow(
       <GenreQuestionScreen
         onAnswer={
@@ -45,6 +47,12 @@ it(`When user answers genre question form is not sent`, () => {
         }
         question={
           genreQuestion
+        }
+        onChange={
+          () => {}
+        }
+        userAnswers={
+          userAnswer
         }
         renderPlayer={() => {}}
       />
@@ -60,20 +68,26 @@ it(`When user answers genre question form is not sent`, () => {
   expect(formSendPrevention).toHaveBeenCalledTimes(1);
 });
 
-it(`When user answers genre question form is not sent`, () => {
+it(`User answer passed to callback is consistent with "userAnswer" prop`, () => {
   const {
     genreQuestion
   } = mock;
   const onAnswer = jest.fn();
   const userAnswer = [false, true, false, false];
 
-  const genreQuestionScr = shallow(
+  const genreQuestionScr = mount(
       <GenreQuestionScreen
         onAnswer={
           onAnswer
         }
         question={
           genreQuestion
+        }
+        onChange={
+          () => {}
+        }
+        userAnswers={
+          userAnswer
         }
         renderPlayer={() => {}}
       />

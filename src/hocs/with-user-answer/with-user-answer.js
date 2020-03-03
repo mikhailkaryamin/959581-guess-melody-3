@@ -31,6 +31,17 @@ const withUserAnswer = (Component) => {
       onAnswer(question, answers);
     }
 
+    handleChange(i, value) {
+      const {answers} = this.state;
+
+      const userAnswers = answers.slice(0);
+      userAnswers[i] = value;
+
+      this.setState({
+        answers: userAnswers,
+      });
+    }
+
     render() {
       const {
         answers
