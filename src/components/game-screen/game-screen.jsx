@@ -5,6 +5,9 @@ import {
 } from "../../const.js";
 import Mistakes from "../mistakes/mistakes.jsx";
 import {
+  getMistakes
+} from "../../reducer/game/selectors.js";
+import {
   connect
 } from "react-redux";
 
@@ -49,7 +52,7 @@ GameScreen.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  mistakes: state.mistakes,
+  mistakes: getMistakes(state),
 });
 
 export {
