@@ -65,7 +65,7 @@ const reducer = (state = initialState, action) => {
       });
     case ActionType.INCREMENT_MISTAKES:
       return extend(state, {
-        step: state.mistakes + action.payload,
+        mistakes: state.mistakes + action.payload,
       });
     case ActionType.RESET:
       return extend(initialState, {
